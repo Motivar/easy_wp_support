@@ -3,7 +3,7 @@
 Plugin Name: Easy WP Tutorial
 Plugin URI: https://www.motivar.io
 Description: Give your clients fast and easy support
-Version: 0.0
+Version: 0.0.1
 Author: Anastasiou K., Giannopoulos N.
 Author URI: https://motivar.io
 */
@@ -21,17 +21,23 @@ if (is_admin()) {
         /*$url = site_url();
         print_r($url);*/
         $screen     = get_current_screen();
+        $view_page = $screen->base;
         /*print_r($screen) ;*/
         $post_typee = $screen->post_type;
         $args       = array(
-            'post_type' => 'easy_wp_support_help',
+            'post_type' => 'easy_wp_support_post',
             'post_status' => 'publish',
             'meta_query' => array(
                 array(
                     'key' => 'easy_wp_support_help_posttypes',
                     'value' => serialize(strval($post_typee)),
                     'compare' => 'LIKE'
-                )
+                ),
+                array(
+                    'key' => 'easy_wp_support_help_view_page',
+                    'value' => $view_page,
+                    'compare' => '='
+                ),
             )
         );
         $help_posts = get_posts($args);
@@ -60,16 +66,18 @@ if (is_admin()) {
             $tttile  = isset($_POST['post_title']) ? $_POST['post_title'] : '';
             $changes = $types = array();
             switch ($tt) {
-                case 'easy_wp_support_help':
+                case 'easy_wp_support_post':
                     // $repeater = $_POST('ctm_help_step');
                     $steps_arrray     = array_values($_POST['acf']);
                     $post_types_array = $steps_arrray[1];
+                    $view_page = $steps_arrray[2];
                     $posttypes        = array();
                     foreach ($post_types_array as $parray) {
                         $parray      = array_values($parray);
                         $posttypes[] = $parray[0];
                     }
                     update_post_meta($post_id, 'easy_wp_support_help_posttypes', $posttypes);
+                    update_post_meta($post_id, 'easy_wp_support_help_view_page', $view_page);
                     $steps_array = $steps_arrray[0];
                     $count       = count($steps_array);
                     $msg         = '<h1>' . $ptitle . '</h1>';
@@ -282,4 +290,168 @@ function easy_wp_support_register_my_cpts()
     }
 }
 
+function easy_wp_support_functions_slugify($text)
+{
+    // replace non letter or digits by -
+    $text = preg_replace('~[^\pL\d]+~u', '-', $text);
+    // transliterate
+    $text = iconv('utf-8', 'us-ascii//TRANSLIT', $text);
+    // remove unwanted characters
+    $text = preg_replace('~[^-\w]+~', '', $text);
+    // trim
+    $text = trim($text, '-');
+    // remove duplicate -
+    $text = preg_replace('~-+~', '-', $text);
+    // lowercase
+    $text = strtolower($text);
+    if (empty($text)) {
+        return 'n-a';
+    }
+    return $text;
+}
 
+function easy_wp_support_functions_greeklish($Name)
+{
+    $greek   = array(
+        'α',
+        'ά',
+        'Ά',
+        'Α',
+        'β',
+        'Β',
+        'γ',
+        'Γ',
+        'δ',
+        'Δ',
+        'ε',
+        'έ',
+        'Ε',
+        'Έ',
+        'ζ',
+        'Ζ',
+        'η',
+        'ή',
+        'Η',
+        'θ',
+        'Θ',
+        'ι',
+        'ί',
+        'ϊ',
+        'ΐ',
+        'Ι',
+        'Ί',
+        'κ',
+        'Κ',
+        'λ',
+        'Λ',
+        'μ',
+        'Μ',
+        'ν',
+        'Ν',
+        'ξ',
+        'Ξ',
+        'ο',
+        'ό',
+        'Ο',
+        'Ό',
+        'π',
+        'Π',
+        'ρ',
+        'Ρ',
+        'σ',
+        'ς',
+        'Σ',
+        'τ',
+        'Τ',
+        'υ',
+        'ύ',
+        'Υ',
+        'Ύ',
+        'φ',
+        'Φ',
+        'χ',
+        'Χ',
+        'ψ',
+        'Ψ',
+        'ω',
+        'ώ',
+        'Ω',
+        'Ώ',
+        ' ',
+        "'",
+        "'",
+        ','
+    );
+    $english = array(
+        'a',
+        'a',
+        'A',
+        'A',
+        'b',
+        'B',
+        'g',
+        'G',
+        'd',
+        'D',
+        'e',
+        'e',
+        'E',
+        'E',
+        'z',
+        'Z',
+        'i',
+        'i',
+        'I',
+        'th',
+        'Th',
+        'i',
+        'i',
+        'i',
+        'i',
+        'I',
+        'I',
+        'k',
+        'K',
+        'l',
+        'L',
+        'm',
+        'M',
+        'n',
+        'N',
+        'x',
+        'X',
+        'o',
+        'o',
+        'O',
+        'O',
+        'p',
+        'P',
+        'r',
+        'R',
+        's',
+        's',
+        'S',
+        't',
+        'T',
+        'u',
+        'u',
+        'Y',
+        'Y',
+        'f',
+        'F',
+        'ch',
+        'Ch',
+        'ps',
+        'Ps',
+        'o',
+        'o',
+        'O',
+        'O',
+        '-',
+        '-',
+        '-',
+        '-'
+    );
+    $string  = str_replace($greek, $english, $Name);
+    return $string;
+}

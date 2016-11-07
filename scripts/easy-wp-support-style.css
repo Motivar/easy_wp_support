@@ -99,3 +99,7 @@
 
 
 /*Help Button css End*/
+
+.post-type-easy_wp_support_post #postdivrich {
+    display: none !important;
+}

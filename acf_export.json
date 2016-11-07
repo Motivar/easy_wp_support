@@ -126,6 +126,31 @@
                         "disabled": 0
                     }
                 ]
+            },
+            {
+                "key": "field_581f83d67ecad",
+                "label": "Select View Page ( 'edit' for list view \/ 'post' for inside post)",
+                "name": "easy_wp_tutorials_select_view_page",
+                "type": "select",
+                "instructions": "Select 'edit' for list view \/ 'post' for inside post",
+                "required": 1,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "",
+                    "class": "",
+                    "id": ""
+                },
+                "choices": {
+                    "edit": "Edit",
+                    "post": "Post"
+                },
+                "default_value": [],
+                "allow_null": 0,
+                "multiple": 0,
+                "ui": 0,
+                "ajax": 0,
+                "return_format": "value",
+                "placeholder": ""
             }
         ],
         "location": [
