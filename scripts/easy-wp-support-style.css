@@ -103,3 +103,10 @@
 .post-type-easy_wp_support_post #postdivrich {
     display: none !important;
 }
+
+.easy_wp_support_yoast_exlude
+{
+    display: none;
+}
+
+

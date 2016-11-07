@@ -3,7 +3,7 @@
 Plugin Name: Easy WP Tutorial
 Plugin URI: https://www.motivar.io
 Description: Give your clients fast and easy support
-Version: 0.0.1
+Version: 0.1
 Author: Anastasiou K., Giannopoulos N.
 Author URI: https://motivar.io
 */
@@ -12,7 +12,70 @@ if (!defined('WPINC')) {
     die;
 }
 
+
+function easy_wp_support_yoast_exlude_prep( $response, $attachment, $meta ) {
+
+    $check = get_post_meta( $response['id'], 'easy_wp_support_yoast_exlude', true ) ?: 0;
+    if ($check==1)
+    {
+      $response['customClass'] = "easy_wp_support_yoast_exlude";
+    }
+    return $response;
+
+}
+
+add_filter( 'wp_prepare_attachment_for_js', 'easy_wp_support_yoast_exlude_prep', 10, 3 );
+
+
+
+
+
 if (is_admin()) {
+
+/*media meta for Yoast seo*/
+function easy_wp_support_img_exclude($form_fields, $post){
+$yoast=get_option('wpseo_xml') ?: array();
+if (!empty($yoast) && $yoast['enablexmlsitemap']==1)
+{
+   $check = get_post_meta( $post->ID, 'easy_wp_support_yoast_exlude', true ) ?: 0;
+   $active= $check==1 ? 'checked' : '';
+    $form_fields['easy_wp_support_yoast_exlude'] = array(
+        'label' => 'Remove this media from Yoast sitemap',
+        'input' => 'html',
+        'html'  => '<input type="checkbox" id="easy_wp_support_yoast_exlude" name="easy_wp_support_yoast_exlude" '.$active.' value="1"/>'
+        );
+    return $form_fields;
+    }
+
+}
+add_filter( 'attachment_fields_to_edit', 'easy_wp_support_img_exclude', 10, 2 );
+
+
+function easy_wp_support_yoast_exlude_save($post, $attachment){
+    $val=isset($_POST['easy_wp_support_yoast_exlude']) ? (int)$_POST['easy_wp_support_yoast_exlude'] : 0;
+    $yoast=get_option('wpseo_xml');
+    $exl_posts=explode(',',$yoast['excluded-posts']);
+    switch ($val) {
+        case 1:
+           update_post_meta($post['ID'],'easy_wp_support_yoast_exlude', 1);
+           if (!in_array($post['ID'], $exl_posts)) {
+                 $exl_posts[] = $post['ID'];
+            }
+            break;
+        default:
+           delete_post_meta($post['ID'], 'easy_wp_support_yoast_exlude');
+           if(($key = array_search($post['ID'], $exl_posts)) !== false) {
+    unset($exl_posts[$key]);
+}
+            break;
+    }
+    $yoast['excluded-posts']=implode(',',$exl_posts);
+    update_option('wpseo_xml',$yoast);
+    return $post;
+     }
+add_filter('attachment_fields_to_save', 'easy_wp_support_yoast_exlude_save', 10, 2);
+
+
 
     /*create the necessary divs*/
     add_action('in_admin_footer', 'easy_wp_support_help');
@@ -20,8 +83,17 @@ if (is_admin()) {
     {
         /*$url = site_url();
         print_r($url);*/
+
         $screen     = get_current_screen();
         $view_page = $screen->base;
+        if ($view_page=='upload')
+        {
+            $yoast=get_option('wpseo_xml') ?: array();
+if (!empty($yoast) && $yoast['enablexmlsitemap']==1)
+    {
+    echo '<input type="hidden" id="easy_wp_support_exclude_images" value="'.$yoast['excluded-posts'].'">';
+    }
+        }
         /*print_r($screen) ;*/
         $post_typee = $screen->post_type;
         $args       = array(
@@ -122,40 +194,6 @@ if (is_admin()) {
             }
         }
     }
-
-
-
-
-    /*load dynamic the scripts*/
-    $path = plugin_dir_path(__FILE__) . '/scripts/';
-    /*check which dynamic scripts should be loaded*/
-    if (file_exists($path)) {
-        $paths = array(
-            'js',
-            'css'
-        );
-        foreach ($paths as $kk) {
-            $check = glob($path . '*.' . $kk);
-            if (!empty($check)) {
-
-                foreach (glob($path . '*.' . $kk) as $filename) {
-                    switch ($kk) {
-                        case 'js':
-                            wp_enqueue_script('easy-wp-support-' . basename($filename), plugin_dir_url(__FILE__) . 'scripts/' . basename($filename), array(), array(), true);
-                            break;
-                        default:
-                            wp_enqueue_style('easy-wp-support-' . basename($filename), plugin_dir_url(__FILE__) . 'scripts/' . basename($filename), array(), '', 'all');
-                            break;
-                    }
-                }
-
-            }
-        }
-
-    }
-
-
-
 
 
 
@@ -455,3 +493,42 @@ function easy_wp_support_functions_greeklish($Name)
     $string  = str_replace($greek, $english, $Name);
     return $string;
 }
+
+
+
+add_action('admin_init', 'easy_wp_support_yoast_exlude_myuser');
+function easy_wp_support_yoast_exlude_myuser()
+{
+if (!is_super_admin())
+{
+
+    /*load dynamic the scripts*/
+    $path = plugin_dir_path(__FILE__) . '/scripts/';
+    /*check which dynamic scripts should be loaded*/
+    if (file_exists($path)) {
+        $paths = array(
+            'js',
+            'css'
+        );
+        foreach ($paths as $kk) {
+            $check = glob($path . '*.' . $kk);
+            if (!empty($check)) {
+
+                foreach (glob($path . '*.' . $kk) as $filename) {
+                    switch ($kk) {
+                        case 'js':
+                            wp_enqueue_script('easy-wp-support-' . basename($filename), plugin_dir_url(__FILE__) . 'scripts/' . basename($filename), array(), array(), true);
+                            break;
+                        default:
+                            wp_enqueue_style('easy-wp-support-' . basename($filename), plugin_dir_url(__FILE__) . 'scripts/' . basename($filename), array(), '', 'all');
+                            break;
+                    }
+                }
+
+            }
+        }
+
+    }
+}
+}
+
