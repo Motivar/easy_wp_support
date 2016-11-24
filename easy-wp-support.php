@@ -3,7 +3,7 @@
 Plugin Name: Easy WP Tutorial
 Plugin URI: https://www.motivar.io
 Description: Give your clients fast and easy support
-Version: 0.3
+Version: 0.4
 Author: Anastasiou K., Giannopoulos N.
 Author URI: https://motivar.io
 */
@@ -92,7 +92,7 @@ add_filter('attachment_fields_to_save', 'easy_wp_support_yoast_exlude_save', 10,
 $yoast=get_option('wpseo_xml') ?: array();
 if (!empty($yoast) && $yoast['enablexmlsitemap']==1)
     {
-    add_action('pre_get_posts', 'easy_wp_support_exclude_images');
+
     echo '<input type="hidden" id="easy_wp_support_exclude_images" value="'.$yoast['excluded-posts'].'">';
     }
         }
@@ -503,6 +503,9 @@ function easy_wp_support_yoast_exlude_myuser()
 {
 if (!is_super_admin())
 {
+
+
+    add_action('pre_get_posts', 'easy_wp_support_exclude_images');
     add_action('in_admin_footer', 'easy_wp_support_help');
 
     /*load dynamic the scripts*/
@@ -534,9 +537,6 @@ if (!is_super_admin())
     }
 }
 }
-
-
-
    function easy_wp_support_exclude_images($query)
     {
     $meta_query = $query->get('meta_query') ?: array();
