@@ -20,6 +20,10 @@ function easy_wp_support_yoast_exlude_prep( $response, $attachment, $meta ) {
     {
       $response['customClass'] = "easy_wp_support_yoast_exlude";
     }
+    else
+    {
+        $response['customClass'] = "";
+    }
     return $response;
 
 }
@@ -37,6 +41,7 @@ function easy_wp_support_img_exclude($form_fields, $post){
 $yoast=get_option('wpseo_xml') ?: array();
 if (!empty($yoast) && $yoast['enablexmlsitemap']==1)
 {
+
    $check = get_post_meta( $post->ID, 'easy_wp_support_yoast_exlude', true ) ?: 0;
    $active= $check==1 ? 'checked' : '';
     $form_fields['easy_wp_support_yoast_exlude'] = array(
@@ -79,35 +84,29 @@ add_filter('attachment_fields_to_save', 'easy_wp_support_yoast_exlude_save', 10,
 
     function easy_wp_support_help()
     {
-        /*$url = site_url();
-        print_r($url);*/
-
         $screen     = get_current_screen();
         $view_page = $screen->base;
         if ($view_page=='upload')
         {
-            $yoast=get_option('wpseo_xml') ?: array();
-            if (!empty($yoast) && $yoast['enablexmlsitemap']==1)
-            {
-                echo '<input type="hidden" id="easy_wp_support_exclude_images" value="'.$yoast['excluded-posts'].'">';
-            }
-        }
-        $post_typee = $screen->post_type;
-        if (!empty($post_typee)){
-            $meta_query_post = array(
-                    'key' => 'easy_wp_support_help_posttypes',
-                    'value' => serialize(strval($post_typee)),
-                    'compare' => 'LIKE');
-        }
-        else {
-            $meta_query_post = array();
-        }
 
+$yoast=get_option('wpseo_xml') ?: array();
+if (!empty($yoast) && $yoast['enablexmlsitemap']==1)
+    {
+    add_action('pre_get_posts', 'easy_wp_support_exclude_images');
+    echo '<input type="hidden" id="easy_wp_support_exclude_images" value="'.$yoast['excluded-posts'].'">';
+    }
+        }
+        /*print_r($screen) ;*/
+        $post_typee = $screen->post_type;
         $args       = array(
             'post_type' => 'easy_wp_support_post',
             'post_status' => 'publish',
             'meta_query' => array(
-                $meta_query_post,
+                array(
+                    'key' => 'easy_wp_support_help_posttypes',
+                    'value' => serialize(strval($post_typee)),
+                    'compare' => 'LIKE'
+                ),
                 array(
                     'key' => 'easy_wp_support_help_view_page',
                     'value' => $view_page,
@@ -536,3 +535,14 @@ if (!is_super_admin())
 }
 }
 
+
+
+   function easy_wp_support_exclude_images($query)
+    {
+    $meta_query = $query->get('meta_query') ?: array();
+    $meta_query[] = array(
+      'key' => 'easy_wp_support_yoast_exlude',
+      'compare' => 'NOT EXISTS'
+    );
+    $query->set('meta_query', $meta_query);
+    }
