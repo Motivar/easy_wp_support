@@ -3,7 +3,7 @@
 Plugin Name: Easy WP Tutorial
 Plugin URI: https://www.motivar.io
 Description: Give your clients fast and easy support
-Version: 0.1.1
+Version: 0.3
 Author: Anastasiou K., Giannopoulos N.
 Author URI: https://motivar.io
 */
@@ -19,10 +19,6 @@ function easy_wp_support_yoast_exlude_prep( $response, $attachment, $meta ) {
     if ($check==1)
     {
       $response['customClass'] = "easy_wp_support_yoast_exlude";
-    }
-    else
-    {
-        $response['customClass'] = "";
     }
     return $response;
 
@@ -91,22 +87,27 @@ add_filter('attachment_fields_to_save', 'easy_wp_support_yoast_exlude_save', 10,
         if ($view_page=='upload')
         {
             $yoast=get_option('wpseo_xml') ?: array();
-if (!empty($yoast) && $yoast['enablexmlsitemap']==1)
-    {
-    echo '<input type="hidden" id="easy_wp_support_exclude_images" value="'.$yoast['excluded-posts'].'">';
-    }
+            if (!empty($yoast) && $yoast['enablexmlsitemap']==1)
+            {
+                echo '<input type="hidden" id="easy_wp_support_exclude_images" value="'.$yoast['excluded-posts'].'">';
+            }
         }
-        /*print_r($screen) ;*/
         $post_typee = $screen->post_type;
+        if (!empty($post_typee)){
+            $meta_query_post = array(
+                    'key' => 'easy_wp_support_help_posttypes',
+                    'value' => serialize(strval($post_typee)),
+                    'compare' => 'LIKE');
+        }
+        else {
+            $meta_query_post = array();
+        }
+
         $args       = array(
             'post_type' => 'easy_wp_support_post',
             'post_status' => 'publish',
             'meta_query' => array(
-                array(
-                    'key' => 'easy_wp_support_help_posttypes',
-                    'value' => serialize(strval($post_typee)),
-                    'compare' => 'LIKE'
-                ),
+                $meta_query_post,
                 array(
                     'key' => 'easy_wp_support_help_view_page',
                     'value' => $view_page,
