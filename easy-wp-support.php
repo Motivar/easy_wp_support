@@ -6,6 +6,8 @@ Description: Give your clients fast and easy support
 Version: 0.4
 Author: Anastasiou K., Giannopoulos N.
 Author URI: https://motivar.io
+GitHub Plugin URI: https://github.com/Motivar/easy_wp_support
+GitHub Branch:     master
 */
 
 if (!defined('WPINC')) {
