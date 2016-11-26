@@ -3,9 +3,10 @@
 Plugin Name: Easy WP Tutorial
 Plugin URI: https://www.motivar.io
 Description: Give your clients fast and easy support
-Version: 0.4
+Version: 0.4.1
 Author: Anastasiou K., Giannopoulos N.
 Author URI: https://motivar.io
+Text Domain:       github-updater
 GitHub Plugin URI: https://github.com/Motivar/easy_wp_support
 GitHub Branch:     master
 */
