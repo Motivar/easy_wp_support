@@ -1,5 +1,5 @@
 #Easy Wp Support
-* Contributors:Anastasiou Konstantinos, [Giannopoulos Nikolaos](https://github.com/gnnpls)
+* Contributors:[Anastasiou Konstantinos](https://github.com/kanastasiou), [Giannopoulos Nikolaos](https://github.com/gnnpls)
 * Tags: plugin, wordpress, tutorials, customers support
 * Requires at least: 4.0
 * Requires PHP: 5.3
