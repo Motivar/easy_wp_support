@@ -87,7 +87,6 @@ add_filter('attachment_fields_to_save', 'easy_wp_support_yoast_exlude_save', 10,
         print_r($url);*/
 
         $screen     = get_current_screen();
-        echo '<br/>';
         $view_page = $screen->base;
         $taxonomy_name = $screen->taxonomy;
         if ($view_page=='upload')
@@ -101,7 +100,7 @@ if (!empty($yoast) && $yoast['enablexmlsitemap']==1)
         /*print_r($screen) ;*/
         $post_typee = $screen->post_type;
 
-        if ($view_page == 'edit-tags'){
+        if (($view_page == 'edit-tags') || ($view_page == 'term')){
             $taxonomy_name_array = array(
                     'key' => 'easy_wp_tutorials_insert_taxonomy_name',
                     'value' => $taxonomy_name,
