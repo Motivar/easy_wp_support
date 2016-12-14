@@ -3,13 +3,15 @@
 Plugin Name: Easy WP Tutorial
 Plugin URI: https://www.motivar.io
 Description: Give your clients fast and easy support
-Version: 0.4.2
+Version: 0.4.3
 Author: Anastasiou K., Giannopoulos N.
 Author URI: https://motivar.io
 Text Domain:       github-updater
 GitHub Plugin URI: https://github.com/Motivar/easy_wp_support
 GitHub Branch:     master
 */
+
+/*some comments*/
 
 if (!defined('WPINC')) {
     die;
@@ -95,14 +97,20 @@ add_filter('attachment_fields_to_save', 'easy_wp_support_yoast_exlude_save', 10,
         if ($view_page=='upload')
         {
             $yoast=get_option('wpseo_xml') ?: array();
-
-            if (!empty($yoast) && $yoast['enablexmlsitemap']==1)
-            {
-                echo '<input type="hidden" id="easy_wp_support_exclude_images" value="'.$yoast['excluded-posts'].'">';
-            }
+if (!empty($yoast) && $yoast['enablexmlsitemap']==1)
+    {
+    echo '<input type="hidden" id="easy_wp_support_exclude_images" value="'.$yoast['excluded-posts'].'">';
+    }
         }
         /*print_r($screen) ;*/
         $post_typee = $screen->post_type;
+        if (!empty($post_typee)){
+            $post_typee_array =  array(
+                    'key' => 'easy_wp_support_help_posttypes',
+                    'value' => serialize(strval($post_typee)),
+                    'compare' => 'LIKE'
+                );
+        }
 
         if (($view_page == 'edit-tags') || ($view_page == 'term')){
             $taxonomy_name_array = array(
@@ -118,11 +126,7 @@ add_filter('attachment_fields_to_save', 'easy_wp_support_yoast_exlude_save', 10,
             'post_type' => 'easy_wp_support_post',
             'post_status' => 'publish',
             'meta_query' => array(
-                array(
-                    'key' => 'easy_wp_support_help_posttypes',
-                    'value' => serialize(strval($post_typee)),
-                    'compare' => 'LIKE'
-                ),
+                $post_typee_array,
                 array(
                     'key' => 'easy_wp_support_help_view_page',
                     'value' => $view_page,
@@ -520,7 +524,6 @@ function easy_wp_support_yoast_exlude_myuser()
 {
 if (!is_super_admin())
 {
-    add_action('pre_get_posts', 'easy_wp_support_exclude_images');
     add_action('in_admin_footer', 'easy_wp_support_help');
 
     /*load dynamic the scripts*/
@@ -552,12 +555,4 @@ if (!is_super_admin())
     }
 }
 }
-function easy_wp_support_exclude_images($query)
-{
-    $meta_query = $query->get('meta_query') ?: array();
-    $meta_query[] = array(
-      'key' => 'easy_wp_support_yoast_exlude',
-      'compare' => 'NOT EXISTS'
-    );
-    $query->set('meta_query', $meta_query);
-}
+
