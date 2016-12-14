@@ -3,7 +3,7 @@
 Plugin Name: Easy WP Tutorial
 Plugin URI: https://www.motivar.io
 Description: Give your clients fast and easy support
-Version: 0.4.3
+Version: 0.4.4
 Author: Anastasiou K., Giannopoulos N.
 Author URI: https://motivar.io
 Text Domain:       github-updater
@@ -110,6 +110,9 @@ if (!empty($yoast) && $yoast['enablexmlsitemap']==1)
                     'value' => serialize(strval($post_typee)),
                     'compare' => 'LIKE'
                 );
+        }
+        else {
+            $post_typee_array = array();
         }
 
         if (($view_page == 'edit-tags') || ($view_page == 'term')){
