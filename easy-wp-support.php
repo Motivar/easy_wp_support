@@ -3,7 +3,7 @@
 Plugin Name: Easy WP Tutorial
 Plugin URI: https://www.motivar.io
 Description: Give your clients fast and easy support
-Version: 0.4.4
+Version: 0.4.5
 Author: Anastasiou K., Giannopoulos N.
 Author URI: https://motivar.io
 Text Domain:       github-updater
@@ -11,118 +11,164 @@ GitHub Plugin URI: https://github.com/Motivar/easy_wp_support
 GitHub Branch:     master
 */
 
-/*some comments*/
-
 if (!defined('WPINC')) {
     die;
 }
 
 
-function easy_wp_support_yoast_exlude_prep( $response, $attachment, $meta ) {
 
-    $check = get_post_meta( $response['id'], 'easy_wp_support_yoast_exlude', true ) ?: 0;
-    if ($check==1)
-    {
-      $response['customClass'] = "easy_wp_support_yoast_exlude";
+add_action('admin_menu', 'settings_options');
+
+function settings_options()
+{
+    add_options_page('Tutorials Users', 'Tutorials Users', 'manage_options', 'tutorials_users', 'tutorials_users_func');
+}
+
+function tutorials_users_func($flag)
+{
+    global $wp_roles;
+    $roles = $wp_roles->get_names();
+    $msg   = '';
+    
+    switch ($flag) {
+        case 'check_cur_role':
+            $current_user        = wp_get_current_user();
+            $user_roles          = $current_user->roles;
+            $selected_user_roles = get_option('easy_wp_users');
+            
+            if (in_array($user_roles[0], $selected_user_roles)) {
+                return 1;
+            } else {
+                return 0;
+            }
+            
+            break;
+        default:
+            wp_enqueue_style('easy-wp-support-style_css', plugin_dir_url(__FILE__) . 'scripts/easy-wp-support-style.css', array(), '', 'all');
+            if (isset($_POST['user_roles']) && !empty($_POST['user_roles'])) {
+                update_option('easy_wp_users', $_POST['user_roles']);
+            }
+            $selected_user_roles = get_option('easy_wp_users');
+            $msg                 = '<form action="" method="post"><div class="user_roles_list"><h4>' . __("Choose users", "easy_wp_user_roles_title") . '</h4>';
+            
+            foreach ($roles as $k => $v) {
+                $chk = '';
+                if (in_array($k, $selected_user_roles)) {
+                    $chk .= ' checked';
+                }
+                $msg .= '<label for="' . $k . '"><input type="checkbox" name="user_roles[]" value="' . $k . '" id="' . $k . '" ' . $chk . '/> ' . $v . '</label>';
+            }
+            $msg .= '<input type="submit" value="' . __("Save", "easy_wp_user_roles_save") . '"/></div></form>';
+            
+            echo $msg;
+            break;
     }
-    else
-    {
+    
+}
+
+function easy_wp_support_yoast_exlude_prep($response, $attachment, $meta)
+{
+    
+    $check = get_post_meta($response['id'], 'easy_wp_support_yoast_exlude', true) ?: 0;
+    if ($check == 1) {
+        $response['customClass'] = "easy_wp_support_yoast_exlude";
+    } else {
         $response['customClass'] = "";
     }
     return $response;
-
+    
 }
 
-add_filter( 'wp_prepare_attachment_for_js', 'easy_wp_support_yoast_exlude_prep', 10, 3 );
+add_filter('wp_prepare_attachment_for_js', 'easy_wp_support_yoast_exlude_prep', 10, 3);
 
 
-
-
-
-if (is_admin()) {
 
 /*media meta for Yoast seo*/
-function easy_wp_support_img_exclude($form_fields, $post){
-$yoast=get_option('wpseo_xml') ?: array();
-if (!empty($yoast) && $yoast['enablexmlsitemap']==1)
+function easy_wp_support_img_exclude($form_fields, $post)
 {
-   $check = get_post_meta( $post->ID, 'easy_wp_support_yoast_exlude', true ) ?: 0;
-   $active= $check==1 ? 'checked' : '';
-    $form_fields['easy_wp_support_yoast_exlude'] = array(
-        'label' => 'Remove this media from Yoast sitemap',
-        'input' => 'html',
-        'html'  => '<input type="checkbox" id="easy_wp_support_yoast_exlude" name="easy_wp_support_yoast_exlude" '.$active.' value="1"/>'
-        );
-    return $form_fields;
+    $user_flag = tutorials_users_func('check_cur_role');
+    if ($user_flag === 1) {
+        $yoast = get_option('wpseo_xml') ?: array();
+        if (!empty($yoast) && $yoast['enablexmlsitemap'] == 1) {
+            $check                                       = get_post_meta($post->ID, 'easy_wp_support_yoast_exlude', true) ?: 0;
+            $active                                      = $check == 1 ? 'checked' : '';
+            $form_fields['easy_wp_support_yoast_exlude'] = array(
+                'label' => 'Remove this media from Yoast sitemap',
+                'input' => 'html',
+                'html' => '<input type="checkbox" id="easy_wp_support_yoast_exlude" name="easy_wp_support_yoast_exlude" ' . $active . ' value="1"/>'
+            );
+            return $form_fields;
+        }
     }
-
 }
-add_filter( 'attachment_fields_to_edit', 'easy_wp_support_img_exclude', 10, 2 );
+add_filter('attachment_fields_to_edit', 'easy_wp_support_img_exclude', 10, 2);
 
 
-function easy_wp_support_yoast_exlude_save($post, $attachment){
-    $val=isset($_POST['easy_wp_support_yoast_exlude']) ? (int)$_POST['easy_wp_support_yoast_exlude'] : 0;
-    $yoast=get_option('wpseo_xml');
-    $exl_posts=explode(',',$yoast['excluded-posts']);
-    switch ($val) {
-        case 1:
-           update_post_meta($post['ID'],'easy_wp_support_yoast_exlude', 1);
-           if (!in_array($post['ID'], $exl_posts)) {
-                 $exl_posts[] = $post['ID'];
-            }
-            break;
-        default:
-           delete_post_meta($post['ID'], 'easy_wp_support_yoast_exlude');
-           if(($key = array_search($post['ID'], $exl_posts)) !== false) {
-    unset($exl_posts[$key]);
-}
-            break;
+function easy_wp_support_yoast_exlude_save($post, $attachment)
+{
+    $user_flag = tutorials_users_func('check_cur_role');
+    if ($user_flag === 1) {
+        $val       = isset($_POST['easy_wp_support_yoast_exlude']) ? (int) $_POST['easy_wp_support_yoast_exlude'] : 0;
+        $yoast     = get_option('wpseo_xml');
+        $exl_posts = explode(',', $yoast['excluded-posts']);
+        switch ($val) {
+            case 1:
+                update_post_meta($post['ID'], 'easy_wp_support_yoast_exlude', 1);
+                if (!in_array($post['ID'], $exl_posts)) {
+                    $exl_posts[] = $post['ID'];
+                }
+                break;
+            default:
+                delete_post_meta($post['ID'], 'easy_wp_support_yoast_exlude');
+                if (($key = array_search($post['ID'], $exl_posts)) !== false) {
+                    unset($exl_posts[$key]);
+                }
+                break;
+        }
+        $yoast['excluded-posts'] = implode(',', $exl_posts);
+        update_option('wpseo_xml', $yoast);
+        return $post;
     }
-    $yoast['excluded-posts']=implode(',',$exl_posts);
-    update_option('wpseo_xml',$yoast);
-    return $post;
-     }
+}
 add_filter('attachment_fields_to_save', 'easy_wp_support_yoast_exlude_save', 10, 2);
 
 
 
-    function easy_wp_support_help()
-    {
+function easy_wp_support_help()
+{
+    $user_flag = tutorials_users_func('check_cur_role');
+    if ($user_flag === 1) {
         /*$url = site_url();
         print_r($url);*/
-
-        $screen     = get_current_screen();
-        $view_page = $screen->base;
+        
+        $screen        = get_current_screen();
+        $view_page     = $screen->base;
         $taxonomy_name = $screen->taxonomy;
-        if ($view_page=='upload')
-        {
-            $yoast=get_option('wpseo_xml') ?: array();
-if (!empty($yoast) && $yoast['enablexmlsitemap']==1)
-    {
-    echo '<input type="hidden" id="easy_wp_support_exclude_images" value="'.$yoast['excluded-posts'].'">';
-    }
+        if ($view_page == 'upload') {
+            $yoast = get_option('wpseo_xml') ?: array();
+            if (!empty($yoast) && $yoast['enablexmlsitemap'] == 1) {
+                echo '<input type="hidden" id="easy_wp_support_exclude_images" value="' . $yoast['excluded-posts'] . '">';
+            }
         }
         /*print_r($screen) ;*/
         $post_typee = $screen->post_type;
-        if (!empty($post_typee)){
-            $post_typee_array =  array(
-                    'key' => 'easy_wp_support_help_posttypes',
-                    'value' => serialize(strval($post_typee)),
-                    'compare' => 'LIKE'
-                );
-        }
-        else {
+        if (!empty($post_typee)) {
+            $post_typee_array = array(
+                'key' => 'easy_wp_support_help_posttypes',
+                'value' => serialize(strval($post_typee)),
+                'compare' => 'LIKE'
+            );
+        } else {
             $post_typee_array = array();
         }
-
-        if (($view_page == 'edit-tags') || ($view_page == 'term')){
+        
+        if (($view_page == 'edit-tags') || ($view_page == 'term')) {
             $taxonomy_name_array = array(
-                    'key' => 'easy_wp_tutorials_insert_taxonomy_name',
-                    'value' => $taxonomy_name,
-                    'compare' => '='
-                    );
-        }
-        else{
+                'key' => 'easy_wp_tutorials_insert_taxonomy_name',
+                'value' => $taxonomy_name,
+                'compare' => '='
+            );
+        } else {
             $taxonomy_name_array = array();
         }
         $args       = array(
@@ -135,7 +181,7 @@ if (!empty($yoast) && $yoast['enablexmlsitemap']==1)
                     'value' => $view_page,
                     'compare' => '='
                 ),
-                $taxonomy_name_array,
+                $taxonomy_name_array
             )
         );
         $help_posts = get_posts($args);
@@ -153,12 +199,15 @@ if (!empty($yoast) && $yoast['enablexmlsitemap']==1)
             echo '</div></div></div></div>';
         }
     }
+}
 
 
-    /* on save make the right movements*/
-    add_action('acf/save_post', 'easy_wp_support_save_acf', 20);
-    function easy_wp_support_save_acf($post_id)
-    {
+/* on save make the right movements*/
+add_action('acf/save_post', 'easy_wp_support_save_acf', 20);
+function easy_wp_support_save_acf($post_id)
+{
+    $user_flag = tutorials_users_func('check_cur_role');
+    if ($user_flag === 1) {
         if ((!wp_is_post_revision($post_id) && 'auto-draft' != get_post_status($post_id) && 'trash' != get_post_status($post_id))) {
             $tt      = get_post_type($post_id);
             $tttile  = isset($_POST['post_title']) ? $_POST['post_title'] : '';
@@ -168,7 +217,7 @@ if (!empty($yoast) && $yoast['enablexmlsitemap']==1)
                     // $repeater = $_POST('ctm_help_step');
                     $steps_arrray     = array_values($_POST['acf']);
                     $post_types_array = $steps_arrray[1];
-                    $view_page = $steps_arrray[2];
+                    $view_page        = $steps_arrray[2];
                     $posttypes        = array();
                     foreach ($post_types_array as $parray) {
                         $parray      = array_values($parray);
@@ -185,7 +234,7 @@ if (!empty($yoast) && $yoast['enablexmlsitemap']==1)
                         $step_img   = $array[1];
                         $img        = get_the_guid($step_img);
                         $step_desc  = $array[2];
-
+                        
                         $msg .= '<h2>' . $step_title . '</h2>';
                         $msg .= '<div class="tutorial_text">' . wpautop($step_desc) . '</div><br />';
                         if (!empty($step_img)) {
@@ -209,21 +258,19 @@ if (!empty($yoast) && $yoast['enablexmlsitemap']==1)
                         '%s'
                     );
                     break;
-
+                    
             }
             /*update post only if the following exist*/
             if ($tt !== 'page') {
                 if (!empty($changes) && !empty($types) && count($changes) == count($types)) {
                     easy_wp_support_functions_update_post($post_id, $changes, $types);
                 }
-
+                
             }
         }
     }
-
-
-
 }
+
 
 
 /* change slug*/
@@ -275,7 +322,7 @@ add_action('init', 'easy_wp_support_register_my_cpts');
 function easy_wp_support_register_my_cpts()
 {
     $names = easy_wp_support_my_custom_posts('all');
-
+    
     foreach ($names as $n) {
         $chk          = $n['chk'];
         $hierarchical = '';
@@ -319,38 +366,38 @@ function easy_wp_support_register_my_cpts()
             'query_var' => true,
             'supports' => $n['args']
         );
-
+        
         if (!empty($n['slug'])) {
             $args['rewrite']['slug'] = $n['slug'];
         }
-
+        
         if (!empty($n['mnp'])) {
             $args['menu_position'] = $n['mnp'];
         }
-
+        
         if (!empty($n['icn'])) {
             $args['menu_icon'] = $n['icn'];
         }
         register_post_type($n['post'], $args);
-
+        
         if (isset($n['en_slg']) && $n['en_slg'] == 1) {
             add_action('load-options-permalink.php', function($views) use ($n)
             {
                 if (isset($_POST[$n['post'] . '_slug'])) {
                     update_option($n['post'] . '_slug', sanitize_title_with_dashes($_POST[$n['post'] . '_slug']));
                 }
-
+                
                 add_settings_field($n['post'] . '_slug', __($n['pl'] . ' Slug'), function($views) use ($n)
                 {
                     $value = get_option($n['post'] . '_slug');
                     echo '<input type="text" value="' . esc_attr($value) . '" name="' . $n['post'] . '_slug' . '" id="' . $n['post'] . '_slug' . '" class="regular-text" placeholder="' . $n['slug'] . '"/>';
-
+                    
                 }, 'permalink', 'optional');
             });
-
+            
         }
-
-
+        
+        
     }
 }
 
@@ -525,37 +572,36 @@ function easy_wp_support_functions_greeklish($Name)
 add_action('admin_init', 'easy_wp_support_yoast_exlude_myuser');
 function easy_wp_support_yoast_exlude_myuser()
 {
-if (!is_super_admin())
-{
-    add_action('in_admin_footer', 'easy_wp_support_help');
-
-    /*load dynamic the scripts*/
-    $path = plugin_dir_path(__FILE__) . '/scripts/';
-    /*check which dynamic scripts should be loaded*/
-    if (file_exists($path)) {
-        $paths = array(
-            'js',
-            'css'
-        );
-        foreach ($paths as $kk) {
-            $check = glob($path . '*.' . $kk);
-            if (!empty($check)) {
-
-                foreach (glob($path . '*.' . $kk) as $filename) {
-                    switch ($kk) {
-                        case 'js':
-                            wp_enqueue_script('easy-wp-support-' . basename($filename), plugin_dir_url(__FILE__) . 'scripts/' . basename($filename), array(), array(), true);
-                            break;
-                        default:
-                            wp_enqueue_style('easy-wp-support-' . basename($filename), plugin_dir_url(__FILE__) . 'scripts/' . basename($filename), array(), '', 'all');
-                            break;
+    $user_flag = tutorials_users_func('check_cur_role');
+    if ($user_flag === 1) {
+        add_action('in_admin_footer', 'easy_wp_support_help');
+        
+        /*load dynamic the scripts*/
+        $path = plugin_dir_path(__FILE__) . '/scripts/';
+        /*check which dynamic scripts should be loaded*/
+        if (file_exists($path)) {
+            $paths = array(
+                'js',
+                'css'
+            );
+            foreach ($paths as $kk) {
+                $check = glob($path . '*.' . $kk);
+                if (!empty($check)) {
+                    
+                    foreach (glob($path . '*.' . $kk) as $filename) {
+                        switch ($kk) {
+                            case 'js':
+                                wp_enqueue_script('easy-wp-support-' . basename($filename), plugin_dir_url(__FILE__) . 'scripts/' . basename($filename), array(), array(), true);
+                                break;
+                            default:
+                                wp_enqueue_style('easy-wp-support-' . basename($filename), plugin_dir_url(__FILE__) . 'scripts/' . basename($filename), array(), '', 'all');
+                                break;
+                        }
                     }
+                    
                 }
-
             }
+            
         }
-
     }
 }
-}
-

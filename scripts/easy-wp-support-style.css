@@ -104,9 +104,12 @@
     display: none !important;
 }
 
-.easy_wp_support_yoast_exlude,#menu-posts-easy_wp_support_post
-{
+.easy_wp_support_yoast_exlude,
+#menu-posts-easy_wp_support_post {
     display: none !important;
 }
 
-
+.user_roles_list label {
+    display: block;
+    margin-bottom: 5px;
+}
