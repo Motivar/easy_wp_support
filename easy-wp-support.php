@@ -3,7 +3,7 @@
 Plugin Name: Easy WP Tutorial
 Plugin URI: https://www.motivar.io
 Description: Give your clients fast and easy support
-Version: 0.4.7
+Version: 0.4.8
 Author: Anastasiou K., Giannopoulos N.
 Author URI: https://motivar.io
 Text Domain:       github-updater
@@ -29,13 +29,15 @@ function tutorials_users_func($flag)
     global $wp_roles;
     $roles = $wp_roles->get_names();
     $msg   = '';
-    $selected_user_roles = array();
     
     switch ($flag) {
         case 'check_cur_role':
             $current_user        = wp_get_current_user();
             $user_roles          = $current_user->roles;
             $selected_user_roles = get_option('easy_wp_users');
+            if (empty($selected_user_roles)){
+                $selected_user_roles = array();
+            }
             
             if (in_array($user_roles[0], $selected_user_roles)) {
                 return 1;
@@ -50,6 +52,9 @@ function tutorials_users_func($flag)
                 update_option('easy_wp_users', $_POST['user_roles']);
             }
             $selected_user_roles = get_option('easy_wp_users');
+            if (empty($selected_user_roles)){
+                $selected_user_roles = array();
+            }
 
             $msg                 = '<form action="" method="post"><div class="user_roles_list"><h4>' . __("Choose users", "easy_wp_user_roles_title") . '</h4>';
             
