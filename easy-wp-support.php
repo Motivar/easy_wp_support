@@ -3,7 +3,7 @@
 Plugin Name: Easy WP Tutorial
 Plugin URI: https://www.motivar.io
 Description: Give your clients fast and easy support
-Version: 0.4.9
+Version: 0.5.0
 Author: Anastasiou K., Giannopoulos N.
 Author URI: https://motivar.io
 Text Domain:       github-updater
@@ -35,7 +35,7 @@ function tutorials_users_func($flag)
             $current_user        = wp_get_current_user();
             $user_roles          = $current_user->roles;
             $selected_user_roles = get_option('easy_wp_users');
-            if (empty($selected_user_roles)){
+            if (empty($selected_user_roles)) {
                 $selected_user_roles = array();
             }
             
@@ -52,11 +52,11 @@ function tutorials_users_func($flag)
                 update_option('easy_wp_users', $_POST['user_roles']);
             }
             $selected_user_roles = get_option('easy_wp_users');
-            if (empty($selected_user_roles)){
+            if (empty($selected_user_roles)) {
                 $selected_user_roles = array();
             }
-
-            $msg                 = '<form action="" method="post"><div class="user_roles_list"><h4>' . __("Choose users", "easy_wp_user_roles_title") . '</h4>';
+            
+            $msg = '<form action="" method="post"><div class="user_roles_list"><h4>' . __("Choose users", "easy_wp_user_roles_title") . '</h4>';
             
             foreach ($roles as $k => $v) {
                 $chk = '';
@@ -327,87 +327,89 @@ function easy_wp_support_my_custom_posts($post_type)
 add_action('init', 'easy_wp_support_register_my_cpts');
 
 function easy_wp_support_register_my_cpts()
-{       
-    if (is_super_admin()){
-    
-    $names = easy_wp_support_my_custom_posts('all');
-    foreach ($names as $n) {
-        $chk          = $n['chk'];
-        $hierarchical = '';
-        if ($chk == 'true') {
-            $hierarchical == 'false';
-        } else {
-            $hierarchical == 'true';
-        }
-        $labels = $args = array();
-        $labels = array(
-            'name' => $n['pl'],
-            'singular_name' => $n['sn'],
-            'menu_name' => '' . $n['pl'],
-            'add_new' => 'New ' . $n['sn'],
-            'add_new_item' => 'New ' . $n['sn'],
-            'edit' => 'Edit',
-            'edit_item' => 'Edit ' . $n['sn'],
-            'new_item' => 'New ' . $n['sn'],
-            'view' => 'View ' . $n['sn'],
-            'view_item' => 'View ' . $n['sn'],
-            'search_items' => 'Search ' . $n['sn'],
-            'not_found' => 'No ' . $n['pl'],
-            'not_found_in_trash' => 'No trushed ' . $n['pl'],
-            'parent' => 'Parent ' . $n['sn']
-        );
-        $args   = array(
-            'labels' => $labels,
-            'description' => 'My Simple Bookings post type for ' . $n['pl'],
-            'public' => $n['chk'],
-            'show_ui' => true,
-            'has_archive' => $n['chk'],
-            'show_in_menu' => true,
-            'exclude_from_search' => $n['chk'],
-            'capability_type' => 'post',
-            'map_meta_cap' => true,
-            'hierarchical' => $hierarchical,
-            'rewrite' => array(
-                'slug' => $n['post'],
-                'with_front' => true
-            ),
-            'query_var' => true,
-            'supports' => $n['args']
-        );
+{
+    $current_user = wp_get_current_user();
+    $user_roles   = $current_user->roles;
+    if (in_array('administrator', $user_roles)) {
         
-        if (!empty($n['slug'])) {
-            $args['rewrite']['slug'] = $n['slug'];
-        }
-        
-        if (!empty($n['mnp'])) {
-            $args['menu_position'] = $n['mnp'];
-        }
-        
-        if (!empty($n['icn'])) {
-            $args['menu_icon'] = $n['icn'];
-        }
-        register_post_type($n['post'], $args);
-        
-        if (isset($n['en_slg']) && $n['en_slg'] == 1) {
-            add_action('load-options-permalink.php', function($views) use ($n)
-            {
-                if (isset($_POST[$n['post'] . '_slug'])) {
-                    update_option($n['post'] . '_slug', sanitize_title_with_dashes($_POST[$n['post'] . '_slug']));
-                }
-                
-                add_settings_field($n['post'] . '_slug', __($n['pl'] . ' Slug'), function($views) use ($n)
+        $names = easy_wp_support_my_custom_posts('all');
+        foreach ($names as $n) {
+            $chk          = $n['chk'];
+            $hierarchical = '';
+            if ($chk == 'true') {
+                $hierarchical == 'false';
+            } else {
+                $hierarchical == 'true';
+            }
+            $labels = $args = array();
+            $labels = array(
+                'name' => $n['pl'],
+                'singular_name' => $n['sn'],
+                'menu_name' => '' . $n['pl'],
+                'add_new' => 'New ' . $n['sn'],
+                'add_new_item' => 'New ' . $n['sn'],
+                'edit' => 'Edit',
+                'edit_item' => 'Edit ' . $n['sn'],
+                'new_item' => 'New ' . $n['sn'],
+                'view' => 'View ' . $n['sn'],
+                'view_item' => 'View ' . $n['sn'],
+                'search_items' => 'Search ' . $n['sn'],
+                'not_found' => 'No ' . $n['pl'],
+                'not_found_in_trash' => 'No trushed ' . $n['pl'],
+                'parent' => 'Parent ' . $n['sn']
+            );
+            $args   = array(
+                'labels' => $labels,
+                'description' => 'My Simple Bookings post type for ' . $n['pl'],
+                'public' => $n['chk'],
+                'show_ui' => true,
+                'has_archive' => $n['chk'],
+                'show_in_menu' => true,
+                'exclude_from_search' => $n['chk'],
+                'capability_type' => 'post',
+                'map_meta_cap' => true,
+                'hierarchical' => $hierarchical,
+                'rewrite' => array(
+                    'slug' => $n['post'],
+                    'with_front' => true
+                ),
+                'query_var' => true,
+                'supports' => $n['args']
+            );
+            
+            if (!empty($n['slug'])) {
+                $args['rewrite']['slug'] = $n['slug'];
+            }
+            
+            if (!empty($n['mnp'])) {
+                $args['menu_position'] = $n['mnp'];
+            }
+            
+            if (!empty($n['icn'])) {
+                $args['menu_icon'] = $n['icn'];
+            }
+            register_post_type($n['post'], $args);
+            
+            if (isset($n['en_slg']) && $n['en_slg'] == 1) {
+                add_action('load-options-permalink.php', function($views) use ($n)
                 {
-                    $value = get_option($n['post'] . '_slug');
-                    echo '<input type="text" value="' . esc_attr($value) . '" name="' . $n['post'] . '_slug' . '" id="' . $n['post'] . '_slug' . '" class="regular-text" placeholder="' . $n['slug'] . '"/>';
+                    if (isset($_POST[$n['post'] . '_slug'])) {
+                        update_option($n['post'] . '_slug', sanitize_title_with_dashes($_POST[$n['post'] . '_slug']));
+                    }
                     
-                }, 'permalink', 'optional');
-            });
+                    add_settings_field($n['post'] . '_slug', __($n['pl'] . ' Slug'), function($views) use ($n)
+                    {
+                        $value = get_option($n['post'] . '_slug');
+                        echo '<input type="text" value="' . esc_attr($value) . '" name="' . $n['post'] . '_slug' . '" id="' . $n['post'] . '_slug' . '" class="regular-text" placeholder="' . $n['slug'] . '"/>';
+                        
+                    }, 'permalink', 'optional');
+                });
+                
+            }
+            
             
         }
-        
-        
     }
-}
 }
 
 function easy_wp_support_functions_slugify($text)
