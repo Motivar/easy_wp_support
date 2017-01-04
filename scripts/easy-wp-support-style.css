@@ -104,8 +104,7 @@
     display: none !important;
 }
 
-.easy_wp_support_yoast_exlude,
-#menu-posts-easy_wp_support_post {
+.easy_wp_support_yoast_exlude {
     display: none !important;
 }
 
