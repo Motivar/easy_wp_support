@@ -3,7 +3,7 @@
 Plugin Name: Easy WP Tutorial
 Plugin URI: https://www.motivar.io
 Description: Give your clients fast and easy support
-Version: 0.5.0
+Version: 0.5.1
 Author: Anastasiou K., Giannopoulos N.
 Author URI: https://motivar.io
 Text Domain:       github-updater
@@ -15,7 +15,25 @@ if (!defined('WPINC')) {
     die;
 }
 
+add_filter('acf/load_field/name=select_dedicated_page', 'acf_load_tutorial_page_choices');
 
+function acf_load_tutorial_page_choices($field)
+{
+    $args  = array(
+        'post_type' => 'page',
+        'post_status' => 'publish',
+        'posts_per_page' => '-1'
+    );
+    $field['choices']               = array();
+    $field['choices']['']           = 'Select Page';
+    $pages                   = query_posts($args);
+    foreach ($pages as $p) {
+        $field['choices'][$p->ID] = $p->post_title;
+    }
+    // return the field
+    return $field;
+
+}
 
 add_action('admin_menu', 'settings_options');
 
@@ -184,7 +202,7 @@ function easy_wp_support_help()
             'meta_query' => array(
                 $post_typee_array,
                 array(
-                    'key' => 'easy_wp_support_help_view_page',
+                    'key' => 'easy_wp_help_view_page',
                     'value' => $view_page,
                     'compare' => '='
                 ),
@@ -192,21 +210,46 @@ function easy_wp_support_help()
             )
         );
         $help_posts = get_posts($args);
-        if (!empty($help_posts)) {
+
+        /*Search if there are dedicated tutorials for the current post*/
+        $current_id = get_the_ID();
+        $dedicated_args = array(
+            'post_type' => 'easy_wp_support_post',
+            'post_status' => 'publish',
+            'meta_query' => array(
+                array(
+                    'key' => 'select_dedicated_page',
+                    'value' => $current_id,
+                    'compare' => '='
+                )
+            )
+        );
+        $dedicated_tutorial = get_posts($dedicated_args);
+
+        if (!empty($help_posts) || !empty($dedicated_tutorial)) {
             echo '
         <div id="pop_up_button">
         <button class="help-button"><a href="#openModal">Help?</a></button>
         <div id="openModal" class="modalDialog">
         <div><a href="#close" title="Close" class="close">X</a>
         <div class="pop_up">';
-            foreach ($help_posts as $tutorial) {
-                $tut_id = $tutorial->ID;
-                echo stripslashes($tutorial->post_content);
+            if (!empty($help_posts)){
+                foreach ($help_posts as $tutorial) {
+                    $tut_id = $tutorial->ID;
+                    echo stripslashes($tutorial->post_content);
+                }
+            }
+            if (!empty($dedicated_tutorial)){
+                foreach ($dedicated_tutorial as $d_tutorial) {
+                    $d_tut_id = $d_tutorial->ID;
+                    echo stripslashes($d_tutorial->post_content);
+                }
             }
             echo '</div></div></div></div>';
         }
     }
 }
+
 
 
 /* on save make the right movements*/
