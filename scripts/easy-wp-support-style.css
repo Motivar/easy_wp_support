@@ -1,6 +1,6 @@
 /*Help Button css Start*/
 
-.modalDialog {
+.easy_wp_support_modalDialog {
     overflow: hidden;
     position: fixed;
     font-family: Arial, Helvetica, sans-serif;
@@ -17,12 +17,12 @@
     pointer-events: none;
 }
 
-.modalDialog:target {
+.easy_wp_support_modalDialog:target {
     opacity: 1;
     pointer-events: auto;
 }
 
-.modalDialog > div {
+.easy_wp_support_modalDialog > div {
     width: 80%;
     height: 80%;
     position: relative;
@@ -32,12 +32,12 @@
     background: #fff;
 }
 
-.modalDialog img {
+.easy_wp_support_modalDialog img {
     width: 80%;
     max-width: 900px;
 }
 
-.close {
+.easy_wp_support_close {
     background: #606061;
     color: #FFFFFF;
     line-height: 34px;
@@ -56,11 +56,11 @@
     box-shadow: 1px 1px 3px #000;
 }
 
-.close:hover {
+.easy_wp_support_close:hover {
     background: #00d9ff;
 }
 
-.help-button {
+.easy_wp_support_help-button {
     height: 65px;
     width: 65px;
     border-radius: 65px;
@@ -76,17 +76,17 @@
     text-align: center;
 }
 
-.help-button:hover {
+.easy_wp_support_help-button:hover {
     background-color: #00BD32;
 }
 
-.help-button a {
+.easy_wp_support_help-button a {
     color: white !important;
     text-decoration: none !important;
     font-size: 15px;
 }
 
-.pop_up {
+.easy_wp_support_pop_up {
     text-align: center;
     max-height: calc(100vh - 210px);
     overflow-y: auto;

@@ -5,25 +5,13 @@
         "title": "Tutorial Info",
         "fields": [
             {
-                "key": "field_57a9ce09df20a",
-                "label": "New Step",
-                "name": "easy_wp_tutorials_help_step",
-                "type": "repeater",
-                "instructions": "",
-                "required": 0,
-                "conditional_logic": 0,
-                "wrapper": {
-                    "width": "",
-                    "class": "",
-                    "id": ""
-                },
-                "collapsed": "",
-                "min": "",
-                "max": "",
-                "layout": "table",
-                "button_label": "Add Row",
                 "sub_fields": [
                     {
+                        "default_value": "",
+                        "maxlength": "",
+                        "placeholder": "",
+                        "prepend": "",
+                        "append": "",
                         "key": "field_57a9ce2edf20b",
                         "label": "Title",
                         "name": "sbp_help_title",
@@ -35,14 +23,19 @@
                             "width": "",
                             "class": "",
                             "id": ""
-                        },
-                        "default_value": "",
-                        "placeholder": "",
-                        "prepend": "",
-                        "append": "",
-                        "maxlength": ""
+                        }
                     },
                     {
+                        "return_format": "array",
+                        "preview_size": "thumbnail",
+                        "library": "all",
+                        "min_width": "",
+                        "min_height": "",
+                        "min_size": "",
+                        "max_width": "",
+                        "max_height": "",
+                        "max_size": "",
+                        "mime_types": "",
                         "key": "field_57a9ce54df20c",
                         "label": "Image",
                         "name": "sbp_help_img",
@@ -54,19 +47,14 @@
                             "width": "",
                             "class": "",
                             "id": ""
-                        },
-                        "return_format": "array",
-                        "preview_size": "thumbnail",
-                        "library": "all",
-                        "min_width": "",
-                        "min_height": "",
-                        "min_size": "",
-                        "max_width": "",
-                        "max_height": "",
-                        "max_size": "",
-                        "mime_types": ""
+                        }
                     },
                     {
+                        "tabs": "all",
+                        "toolbar": "full",
+                        "media_upload": 1,
+                        "default_value": "",
+                        "delay": 0,
                         "key": "field_57a9ce71df20d",
                         "label": "Description",
                         "name": "sbp_help_description",
@@ -78,18 +66,17 @@
                             "width": "",
                             "class": "",
                             "id": ""
-                        },
-                        "default_value": "",
-                        "tabs": "all",
-                        "toolbar": "full",
-                        "media_upload": 1
+                        }
                     }
-                ]
-            },
-            {
-                "key": "field_57a9ff59dc54f",
-                "label": "Insert Post Type",
-                "name": "easy_wp_tutorials_help_post_types",
+                ],
+                "min": 0,
+                "max": 0,
+                "layout": "table",
+                "button_label": "Add Row",
+                "collapsed": "",
+                "key": "field_57a9ce09df20a",
+                "label": "New Step",
+                "name": "easy_wp_tutorials_help_step",
                 "type": "repeater",
                 "instructions": "",
                 "required": 0,
@@ -98,14 +85,16 @@
                     "width": "",
                     "class": "",
                     "id": ""
-                },
-                "collapsed": "",
-                "min": "",
-                "max": "",
-                "layout": "table",
-                "button_label": "Add Row",
+                }
+            },
+            {
                 "sub_fields": [
                     {
+                        "default_value": "",
+                        "maxlength": "",
+                        "placeholder": "",
+                        "prepend": "",
+                        "append": "",
                         "key": "field_57a9ffcddc550",
                         "label": "insert post type",
                         "name": "insert_post_type",
@@ -117,16 +106,41 @@
                             "width": "",
                             "class": "",
                             "id": ""
-                        },
-                        "default_value": "",
-                        "placeholder": "",
-                        "prepend": "",
-                        "append": "",
-                        "maxlength": ""
+                        }
                     }
-                ]
+                ],
+                "min": 0,
+                "max": 0,
+                "layout": "table",
+                "button_label": "Add Row",
+                "collapsed": "",
+                "key": "field_57a9ff59dc54f",
+                "label": "Insert Post Type",
+                "name": "easy_wp_tutorials_help_post_types",
+                "type": "repeater",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "",
+                    "class": "",
+                    "id": ""
+                }
             },
             {
+                "multiple": 0,
+                "allow_null": 0,
+                "choices": {
+                    "edit": "Edit",
+                    "post": "Post",
+                    "edit-tags": "Taxonomy",
+                    "upload": "Media"
+                },
+                "default_value": [],
+                "ui": 0,
+                "ajax": 0,
+                "placeholder": "",
+                "return_format": "value",
                 "key": "field_581f83d67ecad",
                 "label": "Select View Page ( 'edit' for list view \/ 'post' for inside post)",
                 "name": "easy_wp_tutorials_select_view_page",
@@ -138,20 +152,57 @@
                     "width": "",
                     "class": "",
                     "id": ""
-                },
+                }
+            },
+            {
+                "multiple": 0,
+                "allow_null": 0,
                 "choices": {
-                    "edit": "Edit",
-                    "post": "Post",
-                    "edit-tags": "Taxonomy",
-                    "upload": "Media"
+                    "": "Select Page",
+                    "2389": "tetsts",
+                    "2363": "Activities",
+                    "2223": "Entertainment",
+                    "2218": "Dinning",
+                    "2211": "Room Services",
+                    "1472": "Careers",
+                    "1426": "Top Corfu Beaches",
+                    "834": "Event Planner & General Requests",
+                    "807": "About Us",
+                    "795": "Extra Services",
+                    "743": "Location & Highlights",
+                    "738": "Explore Corfu Island",
+                    "734": "Explore Ipsos",
+                    "696": "Explore Dassia",
+                    "616": "Events Planning",
+                    "548": "Special Requests",
+                    "546": "Corfu Dominoes Gallery",
+                    "544": "GuestBook & Reviews",
+                    "505": "Family Restaurant and Bar",
+                    "508": "Family Hotel Resort",
+                    "429": "Terms & Conditions",
+                    "423": "Corfu Island",
+                    "357": "Corfu Activities",
+                    "312": "Best Rates Online",
+                    "291": "Rooms",
+                    "252": "Home"
                 },
                 "default_value": [],
-                "allow_null": 0,
-                "multiple": 0,
                 "ui": 0,
                 "ajax": 0,
+                "placeholder": "",
                 "return_format": "value",
-                "placeholder": ""
+                "key": "field_586e5b3e24d1d",
+                "label": "Select Dedicated Page",
+                "name": "select_dedicated_page",
+                "type": "select",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "",
+                    "class": "",
+                    "id": ""
+                }
             }
         ],
         "location": [

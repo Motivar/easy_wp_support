@@ -3,7 +3,7 @@
 Plugin Name: Easy WP Tutorial
 Plugin URI: https://www.motivar.io
 Description: Give your clients fast and easy support
-Version: 0.5.3
+Version: 0.5.4
 Author: Anastasiou K., Giannopoulos N.
 Author URI: https://motivar.io
 Text Domain:       github-updater
@@ -227,13 +227,38 @@ function easy_wp_support_help()
         );
         $dedicated_tutorial = get_posts($dedicated_args);
 
-        if (!empty($help_posts) || !empty($dedicated_tutorial)) {
+
+
+        if ( function_exists('icl_object_id') ) {
+            $lan = ICL_LANGUAGE_CODE ;
+            if ($lan == 'en'){
+                $trans_lan = 'el';
+            }
+            else{
+                $trans_lan = 'en';
+            }
+            $trans_id = icl_object_id($current_id, 'page', false, $trans_lan);
+            $trans_args = array(
+            'post_type' => 'easy_wp_support_post',
+            'post_status' => 'publish',
+            'meta_query' => array(
+                array(
+                    'key' => 'select_dedicated_page',
+                    'value' => $trans_id,
+                    'compare' => '='
+                )
+            )
+        );
+        $trans_tutorial = get_posts($trans_args);
+        }
+
+        if (!empty($help_posts) || !empty($dedicated_tutorial) || (isset($trans_tutorial) && !empty($trans_tutorial))) {
             echo '
         <div id="pop_up_button">
-        <button class="help-button"><a href="#openModal">Help?</a></button>
-        <div id="openModal" class="modalDialog">
-        <div><a href="#close" title="Close" class="close">X</a>
-        <div class="pop_up">';
+        <button class="easy_wp_support_help-button"><a href="#openModal">Help?</a></button>
+        <div id="openModal" class="easy_wp_support_modalDialog">
+        <div><a href="#easy_wp_support_close" title="Close" class="easy_wp_support_close">X</a>
+        <div class="easy_wp_support_pop_up">';
             foreach ($help_posts as $tutorial) {
                 $tut_id = $tutorial->ID;
                 echo stripslashes($tutorial->post_content);
@@ -242,6 +267,13 @@ function easy_wp_support_help()
                 foreach ($dedicated_tutorial as $d_tutorial) {
                     $d_tut_id = $d_tutorial->ID;
                     echo stripslashes($d_tutorial->post_content);
+                }
+            }
+            
+            if (isset($trans_tutorial) && !empty($trans_tutorial)){
+                foreach ($trans_tutorial as $tr_tutorial) {
+                    $tr_tut_id = $tr_tutorial->ID;
+                    echo stripslashes($tr_tutorial->post_content);
                 }
             }
             echo '</div></div></div></div>';
