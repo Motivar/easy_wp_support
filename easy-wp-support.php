@@ -3,7 +3,7 @@
 Plugin Name: Easy WP Tutorial
 Plugin URI: https://www.motivar.io
 Description: Give your clients fast and easy support
-Version: 0.5.1
+Version: 0.5.2
 Author: Anastasiou K., Giannopoulos N.
 Author URI: https://motivar.io
 Text Domain:       github-updater
@@ -231,7 +231,7 @@ function easy_wp_support_help()
         <div id="pop_up_button">
         <button class="help-button"><a href="#openModal">Help?</a></button>
         <div id="openModal" class="modalDialog">
-        <div><a href="#close" title="Close" class="close">X</a>
+        <div><a href="#close" title="Close" class="easy_wp_close">X</a>
         <div class="pop_up">';
             if (!empty($help_posts)){
                 foreach ($help_posts as $tutorial) {
