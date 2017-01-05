@@ -213,20 +213,21 @@ function easy_wp_support_help()
         $help_posts = get_posts($args);
 
         /*Search if there are dedicated tutorials for the current post*/
-        $current_id = get_the_ID();
-        $dedicated_args = array(
-            'post_type' => 'easy_wp_support_post',
-            'post_status' => 'publish',
-            'meta_query' => array(
-                array(
+        if ($view_page == 'post'){
+            $current_id = get_the_ID();
+            $dedicated_args = array(
+                'post_type' => 'easy_wp_support_post',
+                'post_status' => 'publish',
+                'meta_query' => array(
+                    array(
                     'key' => 'select_dedicated_page',
                     'value' => $current_id,
                     'compare' => '='
+                    )
                 )
-            )
-        );
-        $dedicated_tutorial = get_posts($dedicated_args);
-
+            );
+            $dedicated_tutorial = get_posts($dedicated_args);
+        }
 
 
         if ( function_exists('icl_object_id') ) {
@@ -252,7 +253,7 @@ function easy_wp_support_help()
         $trans_tutorial = get_posts($trans_args);
         }
 
-        if (!empty($help_posts) || !empty($dedicated_tutorial) || (isset($trans_tutorial) && !empty($trans_tutorial))) {
+        if (!empty($help_posts) || (isset($dedicated_tutorial) && !empty($dedicated_tutorial)) || (isset($trans_tutorial) && !empty($trans_tutorial))) {
             echo '
         <div id="pop_up_button">
         <button class="easy_wp_support_help-button"><a href="#openModal">Help?</a></button>
@@ -263,7 +264,7 @@ function easy_wp_support_help()
                 $tut_id = $tutorial->ID;
                 echo stripslashes($tutorial->post_content);
             }
-            if (!empty($dedicated_tutorial)){
+            if (isset($dedicated_tutorial) && !empty($dedicated_tutorial)){
                 foreach ($dedicated_tutorial as $d_tutorial) {
                     $d_tut_id = $d_tutorial->ID;
                     echo stripslashes($d_tutorial->post_content);
