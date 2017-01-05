@@ -37,7 +37,7 @@
     max-width: 900px;
 }
 
-.easy_wp_close {
+.close {
     background: #606061;
     color: #FFFFFF;
     line-height: 34px;
@@ -56,7 +56,7 @@
     box-shadow: 1px 1px 3px #000;
 }
 
-.easy_wp_close:hover {
+.close:hover {
     background: #00d9ff;
 }
 

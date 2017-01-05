@@ -3,7 +3,7 @@
 Plugin Name: Easy WP Tutorial
 Plugin URI: https://www.motivar.io
 Description: Give your clients fast and easy support
-Version: 0.5.2
+Version: 0.5.3
 Author: Anastasiou K., Giannopoulos N.
 Author URI: https://motivar.io
 Text Domain:       github-updater
@@ -34,6 +34,7 @@ function acf_load_tutorial_page_choices($field)
     return $field;
 
 }
+
 
 add_action('admin_menu', 'settings_options');
 
@@ -202,7 +203,7 @@ function easy_wp_support_help()
             'meta_query' => array(
                 $post_typee_array,
                 array(
-                    'key' => 'easy_wp_help_view_page',
+                    'key' => 'easy_wp_support_help_view_page',
                     'value' => $view_page,
                     'compare' => '='
                 ),
@@ -231,13 +232,11 @@ function easy_wp_support_help()
         <div id="pop_up_button">
         <button class="help-button"><a href="#openModal">Help?</a></button>
         <div id="openModal" class="modalDialog">
-        <div><a href="#close" title="Close" class="easy_wp_close">X</a>
+        <div><a href="#close" title="Close" class="close">X</a>
         <div class="pop_up">';
-            if (!empty($help_posts)){
-                foreach ($help_posts as $tutorial) {
-                    $tut_id = $tutorial->ID;
-                    echo stripslashes($tutorial->post_content);
-                }
+            foreach ($help_posts as $tutorial) {
+                $tut_id = $tutorial->ID;
+                echo stripslashes($tutorial->post_content);
             }
             if (!empty($dedicated_tutorial)){
                 foreach ($dedicated_tutorial as $d_tutorial) {
@@ -249,7 +248,6 @@ function easy_wp_support_help()
         }
     }
 }
-
 
 
 /* on save make the right movements*/
