@@ -3,7 +3,7 @@
 Plugin Name: Easy WP Tutorial
 Plugin URI: https://www.motivar.io
 Description: Give your clients fast and easy support
-Version: 0.5.5
+Version: 0.5.7
 Author: Anastasiou K., Giannopoulos N.
 Author URI: https://motivar.io
 Text Domain:       github-updater
@@ -19,20 +19,20 @@ add_filter('acf/load_field/name=select_dedicated_page', 'acf_load_tutorial_page_
 
 function acf_load_tutorial_page_choices($field)
 {
-    $args  = array(
+    $args                 = array(
         'post_type' => 'page',
         'post_status' => 'publish',
         'posts_per_page' => '-1'
     );
-    $field['choices']               = array();
-    $field['choices']['']           = 'Select Page';
-    $pages                   = query_posts($args);
+    $field['choices']     = array();
+    $field['choices'][''] = 'Select Page';
+    $pages                = query_posts($args);
     foreach ($pages as $p) {
         $field['choices'][$p->ID] = $p->post_title;
     }
     // return the field
     return $field;
-
+    
 }
 
 
@@ -211,49 +211,49 @@ function easy_wp_support_help()
             )
         );
         $help_posts = get_posts($args);
-
+        
         $current_id = get_the_ID();
-
+        
         /*Search if there are dedicated tutorials for the current post*/
-        if ($view_page == 'post'){
-            $dedicated_args = array(
+        if ($view_page == 'post') {
+            $dedicated_args     = array(
                 'post_type' => 'easy_wp_support_post',
                 'post_status' => 'publish',
                 'meta_query' => array(
                     array(
-                    'key' => 'select_dedicated_page',
-                    'value' => $current_id,
-                    'compare' => '='
+                        'key' => 'select_dedicated_page',
+                        'value' => $current_id,
+                        'compare' => '='
                     )
                 )
             );
             $dedicated_tutorial = get_posts($dedicated_args);
-        }
-
-
-        if ( function_exists('icl_object_id') ) {
-            $lan = ICL_LANGUAGE_CODE ;
-            if ($lan == 'en'){
-                $trans_lan = 'el';
+            
+            
+            
+            if (function_exists('icl_object_id')) {
+                $lan = ICL_LANGUAGE_CODE;
+                if ($lan == 'en') {
+                    $trans_lan = 'el';
+                } else {
+                    $trans_lan = 'en';
+                }
+                $trans_id       = icl_object_id($current_id, 'page', false, $trans_lan);
+                $trans_args     = array(
+                    'post_type' => 'easy_wp_support_post',
+                    'post_status' => 'publish',
+                    'meta_query' => array(
+                        array(
+                            'key' => 'select_dedicated_page',
+                            'value' => $trans_id,
+                            'compare' => '='
+                        )
+                    )
+                );
+                $trans_tutorial = get_posts($trans_args);
             }
-            else{
-                $trans_lan = 'en';
-            }
-            $trans_id = icl_object_id($current_id, 'page', false, $trans_lan);
-            $trans_args = array(
-            'post_type' => 'easy_wp_support_post',
-            'post_status' => 'publish',
-            'meta_query' => array(
-                array(
-                    'key' => 'select_dedicated_page',
-                    'value' => $trans_id,
-                    'compare' => '='
-                )
-            )
-        );
-        $trans_tutorial = get_posts($trans_args);
         }
-
+        
         if (!empty($help_posts) || (isset($dedicated_tutorial) && !empty($dedicated_tutorial)) || (isset($trans_tutorial) && !empty($trans_tutorial))) {
             echo '
         <div id="pop_up_button">
@@ -265,14 +265,14 @@ function easy_wp_support_help()
                 $tut_id = $tutorial->ID;
                 echo stripslashes($tutorial->post_content);
             }
-            if (isset($dedicated_tutorial) && !empty($dedicated_tutorial)){
+            if (isset($dedicated_tutorial) && !empty($dedicated_tutorial)) {
                 foreach ($dedicated_tutorial as $d_tutorial) {
                     $d_tut_id = $d_tutorial->ID;
                     echo stripslashes($d_tutorial->post_content);
                 }
             }
             
-            if (isset($trans_tutorial) && !empty($trans_tutorial)){
+            if (isset($trans_tutorial) && !empty($trans_tutorial)) {
                 foreach ($trans_tutorial as $tr_tutorial) {
                     $tr_tut_id = $tr_tutorial->ID;
                     echo stripslashes($tr_tutorial->post_content);
