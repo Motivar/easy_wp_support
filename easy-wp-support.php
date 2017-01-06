@@ -3,7 +3,7 @@
 Plugin Name: Easy WP Tutorial
 Plugin URI: https://www.motivar.io
 Description: Give your clients fast and easy support
-Version: 0.5.4
+Version: 0.5.5
 Author: Anastasiou K., Giannopoulos N.
 Author URI: https://motivar.io
 Text Domain:       github-updater
@@ -214,7 +214,6 @@ function easy_wp_support_help()
 
         /*Search if there are dedicated tutorials for the current post*/
         if ($view_page == 'post'){
-            $current_id = get_the_ID();
             $dedicated_args = array(
                 'post_type' => 'easy_wp_support_post',
                 'post_status' => 'publish',
@@ -229,6 +228,7 @@ function easy_wp_support_help()
             $dedicated_tutorial = get_posts($dedicated_args);
         }
 
+        $current_id = get_the_ID();
 
         if ( function_exists('icl_object_id') ) {
             $lan = ICL_LANGUAGE_CODE ;
