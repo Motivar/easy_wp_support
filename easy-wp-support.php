@@ -212,6 +212,8 @@ function easy_wp_support_help()
         );
         $help_posts = get_posts($args);
 
+        $current_id = get_the_ID();
+
         /*Search if there are dedicated tutorials for the current post*/
         if ($view_page == 'post'){
             $dedicated_args = array(
@@ -228,7 +230,6 @@ function easy_wp_support_help()
             $dedicated_tutorial = get_posts($dedicated_args);
         }
 
-        $current_id = get_the_ID();
 
         if ( function_exists('icl_object_id') ) {
             $lan = ICL_LANGUAGE_CODE ;
