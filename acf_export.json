@@ -133,8 +133,10 @@
                 "choices": {
                     "edit": "Edit",
                     "post": "Post",
-                    "edit-tags": "Taxonomy",
-                    "upload": "Media"
+                    "edit-tags": "Taxonomy List",
+                    "term": "Taxonomy Term",
+                    "upload": "Media",
+                    "dashboard": "Dashboard"
                 },
                 "default_value": [],
                 "ui": 0,
@@ -148,6 +150,40 @@
                 "instructions": "Select 'edit' for list view \/ 'post' for inside post",
                 "required": 1,
                 "conditional_logic": 0,
+                "wrapper": {
+                    "width": "",
+                    "class": "",
+                    "id": ""
+                }
+            },
+            {
+                "default_value": "",
+                "maxlength": "",
+                "placeholder": "",
+                "prepend": "",
+                "append": "",
+                "key": "field_5870de6d0b118",
+                "label": "Insert taxonomy name",
+                "name": "easy_wp_tutorials_insert_taxonomy_name",
+                "type": "text",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": [
+                    [
+                        {
+                            "field": "field_581f83d67ecad",
+                            "operator": "==",
+                            "value": "edit-tags"
+                        }
+                    ],
+                    [
+                        {
+                            "field": "field_581f83d67ecad",
+                            "operator": "==",
+                            "value": "term"
+                        }
+                    ]
+                ],
                 "wrapper": {
                     "width": "",
                     "class": "",
