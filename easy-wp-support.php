@@ -3,7 +3,7 @@
 Plugin Name: Easy WP Tutorial
 Plugin URI: https://www.motivar.io
 Description: Give your clients fast and easy support
-Version: 0.5.7
+Version: 0.5.8
 Author: Anastasiou K., Giannopoulos N.
 Author URI: https://motivar.io
 Text Domain:       github-updater
@@ -255,30 +255,35 @@ function easy_wp_support_help()
         }
         
         if (!empty($help_posts) || (isset($dedicated_tutorial) && !empty($dedicated_tutorial)) || (isset($trans_tutorial) && !empty($trans_tutorial))) {
+
+        $pathh = plugin_dir_url(__FILE__).'expand_up_white.png';
             echo '
         <div id="pop_up_button">
-        <button class="easy_wp_support_help-button"><a href="#openModal">Help?</a></button>
-        <div id="openModal" class="easy_wp_support_modalDialog">
-        <div><a href="#easy_wp_support_close" title="Close" class="easy_wp_support_close">X</a>
-        <div class="easy_wp_support_pop_up">';
-            foreach ($help_posts as $tutorial) {
-                $tut_id = $tutorial->ID;
-                echo stripslashes($tutorial->post_content);
-            }
-            if (isset($dedicated_tutorial) && !empty($dedicated_tutorial)) {
-                foreach ($dedicated_tutorial as $d_tutorial) {
-                    $d_tut_id = $d_tutorial->ID;
-                    echo stripslashes($d_tutorial->post_content);
-                }
-            }
+            <a href="#openModal">
+            <div class="easy_wp_support_help-button help_down">Help?</div>
+            </a>
+            <div id="openModal" class="easy_wp_support_modalDialog">
+                <div>   
+                    <a href="#easy_wp_support_close" title="Close" class="easy_wp_support_close">X</a>
+                    <div class="easy_wp_support_pop_up">';
+                        foreach ($help_posts as $tutorial) {
+                            $tut_id = $tutorial->ID;
+                            echo stripslashes($tutorial->post_content);
+                        }
+                        if (isset($dedicated_tutorial) && !empty($dedicated_tutorial)) {
+                            foreach ($dedicated_tutorial as $d_tutorial) {
+                                $d_tut_id = $d_tutorial->ID;
+                                echo stripslashes($d_tutorial->post_content);
+                            }
+                        }
             
-            if (isset($trans_tutorial) && !empty($trans_tutorial)) {
-                foreach ($trans_tutorial as $tr_tutorial) {
-                    $tr_tut_id = $tr_tutorial->ID;
-                    echo stripslashes($tr_tutorial->post_content);
-                }
-            }
-            echo '</div></div></div></div>';
+                        if (isset($trans_tutorial) && !empty($trans_tutorial)) {
+                            foreach ($trans_tutorial as $tr_tutorial) {
+                                $tr_tut_id = $tr_tutorial->ID;
+                                echo stripslashes($tr_tutorial->post_content);
+                            }
+                        }
+                        echo '</div></div></div></div>';
         }
     }
 }
