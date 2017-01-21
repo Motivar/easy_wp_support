@@ -62,6 +62,7 @@
             }
             
             .easy_wp_support_help-button {
+                z-index: 150;
                 height: 30px;
                 line-height: 30px;
                 width: 170px;
@@ -76,6 +77,8 @@
                 -o-transition: 0.4s ease-in-out;
                 transition: 0.4s ease-in-out;
                 text-align: center;
+                text-decoration: none !important;
+                font-size: 15px;
             }
             
             .easy_wp_support_help-button:hover {
@@ -84,11 +87,6 @@
                 background-color: #2B8194;
                 cursor: pointer;
                 cursor: hand;
-            }
-            
-            .easy_wp_support_help-button {
-                text-decoration: none !important;
-                font-size: 15px;
             }
             
             .easy_wp_support_pop_up {
