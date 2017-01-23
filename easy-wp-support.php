@@ -115,7 +115,7 @@ function easy_wp_support_img_exclude($form_fields, $post)
     $user_flag = tutorials_users_func('check_cur_role');
     if ($user_flag === 1) {
         $yoast = get_option('wpseo_xml') ?: array();
-        if (!empty($yoast) && $yoast['enablexmlsitemap'] == 1) {
+            if ((isset($yoast) && !empty($yoast)) && $yoast['enablexmlsitemap'] == 1) {
             $check                                       = get_post_meta($post->ID, 'easy_wp_support_yoast_exlude', true) ?: 0;
             $active                                      = $check == 1 ? 'checked' : '';
             $form_fields['easy_wp_support_yoast_exlude'] = array(
@@ -173,7 +173,7 @@ function easy_wp_support_help()
         $taxonomy_name = $screen->taxonomy;
         if ($view_page == 'upload') {
             $yoast = get_option('wpseo_xml') ?: array();
-            if (!empty($yoast) && $yoast['enablexmlsitemap'] == 1) {
+            if ((isset($yoast) && !empty($yoast)) && $yoast['enablexmlsitemap'] == 1) {
                 echo '<input type="hidden" id="easy_wp_support_exclude_images" value="' . $yoast['excluded-posts'] . '">';
             }
         }
