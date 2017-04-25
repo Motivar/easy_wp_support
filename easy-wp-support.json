@@ -195,6 +195,7 @@
                 "allow_null": 0,
                 "choices": {
                     "": "Select Page",
+<<<<<<< HEAD:easy-wp-support.json
                     "1512": "\u0395\u03c0\u03b9\u03ba\u03bf\u03b9\u03bd\u03c9\u03bd\u03af\u03b1",
                     "1473": "\u0399\u03c3\u03c4\u03bf\u03c1\u03af\u03b1",
                     "1164": "Online \u039a\u03c1\u03b1\u03c4\u03ae\u03c3\u03b5\u03b9\u03c2 \u039e\u03b5\u03bd\u03bf\u03b4\u03bf\u03c7\u03b5\u03af\u03bf \u0393\u03bf\u03c5\u03b2\u03b9\u03ac",
@@ -205,6 +206,34 @@
                     "1007": "\u03a0\u03b5\u03c1\u03b9\u03bf\u03c7\u03ae & \u0391\u03be\u03b9\u03bf\u03b8\u03ad\u03b1\u03c4\u03b1",
                     "882": "\u0391\u03c1\u03c7\u03b9\u03ba\u03ae",
                     "569": "\u038c\u03c1\u03bf\u03b9 \u039a\u03c1\u03ac\u03c4\u03b7\u03c3\u03b7\u03c2"
+=======
+                    "2389": "tetsts",
+                    "2363": "Activities",
+                    "2223": "Entertainment",
+                    "2218": "Dinning",
+                    "2211": "Room Services",
+                    "1472": "Careers",
+                    "1426": "Top Corfu Beaches",
+                    "834": "Event Planner & General Requests",
+                    "807": "About Us",
+                    "795": "Extra Services",
+                    "743": "Location & Highlights",
+                    "738": "Explore Corfu Island",
+                    "734": "Explore Ipsos",
+                    "696": "Explore Dassia",
+                    "616": "Events Planning",
+                    "548": "Special Requests",
+                    "546": "Corfu Dominoes Gallery",
+                    "544": "GuestBook & Reviews",
+                    "505": "Family Restaurant and Bar",
+                    "508": "Family Hotel Resort",
+                    "429": "Terms & Conditions",
+                    "423": "Corfu Island",
+                    "357": "Corfu Activities",
+                    "312": "Best Rates Online",
+                    "291": "Rooms",
+                    "252": "Home"
+>>>>>>> 027c10180158b8ce0d7734655fe919630acf2c9e:acf_export.json
                 },
                 "default_value": [],
                 "ui": 0,
