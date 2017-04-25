@@ -1,0 +1,248 @@
+
+[
+    {
+        "key": "group_57a9ce00b84c5",
+        "title": "Tutorial Info",
+        "fields": [
+            {
+                "sub_fields": [
+                    {
+                        "default_value": "",
+                        "maxlength": "",
+                        "placeholder": "",
+                        "prepend": "",
+                        "append": "",
+                        "key": "field_57a9ce2edf20b",
+                        "label": "Title",
+                        "name": "sbp_help_title",
+                        "type": "text",
+                        "instructions": "",
+                        "required": 0,
+                        "conditional_logic": 0,
+                        "wrapper": {
+                            "width": "",
+                            "class": "",
+                            "id": ""
+                        }
+                    },
+                    {
+                        "return_format": "array",
+                        "preview_size": "thumbnail",
+                        "library": "all",
+                        "min_width": "",
+                        "min_height": "",
+                        "min_size": "",
+                        "max_width": "",
+                        "max_height": "",
+                        "max_size": "",
+                        "mime_types": "",
+                        "key": "field_57a9ce54df20c",
+                        "label": "Image",
+                        "name": "sbp_help_img",
+                        "type": "image",
+                        "instructions": "",
+                        "required": 0,
+                        "conditional_logic": 0,
+                        "wrapper": {
+                            "width": "",
+                            "class": "",
+                            "id": ""
+                        }
+                    },
+                    {
+                        "tabs": "all",
+                        "toolbar": "full",
+                        "media_upload": 1,
+                        "default_value": "",
+                        "delay": 0,
+                        "key": "field_57a9ce71df20d",
+                        "label": "Description",
+                        "name": "sbp_help_description",
+                        "type": "wysiwyg",
+                        "instructions": "",
+                        "required": 0,
+                        "conditional_logic": 0,
+                        "wrapper": {
+                            "width": "",
+                            "class": "",
+                            "id": ""
+                        }
+                    }
+                ],
+                "min": 0,
+                "max": 0,
+                "layout": "table",
+                "button_label": "Add Row",
+                "collapsed": "",
+                "key": "field_57a9ce09df20a",
+                "label": "New Step",
+                "name": "easy_wp_tutorials_help_step",
+                "type": "repeater",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "",
+                    "class": "",
+                    "id": ""
+                }
+            },
+            {
+                "sub_fields": [
+                    {
+                        "default_value": "",
+                        "maxlength": "",
+                        "placeholder": "",
+                        "prepend": "",
+                        "append": "",
+                        "key": "field_57a9ffcddc550",
+                        "label": "insert post type",
+                        "name": "insert_post_type",
+                        "type": "text",
+                        "instructions": "",
+                        "required": 0,
+                        "conditional_logic": 0,
+                        "wrapper": {
+                            "width": "",
+                            "class": "",
+                            "id": ""
+                        }
+                    }
+                ],
+                "min": 0,
+                "max": 0,
+                "layout": "table",
+                "button_label": "Add Row",
+                "collapsed": "",
+                "key": "field_57a9ff59dc54f",
+                "label": "Insert Post Type",
+                "name": "easy_wp_tutorials_help_post_types",
+                "type": "repeater",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "",
+                    "class": "",
+                    "id": ""
+                }
+            },
+            {
+                "multiple": 0,
+                "allow_null": 0,
+                "choices": {
+                    "edit": "Edit",
+                    "post": "Post",
+                    "edit-tags": "Taxonomy List",
+                    "term": "Taxonomy Term",
+                    "upload": "Media",
+                    "dashboard": "Dashboard"
+                },
+                "default_value": [],
+                "ui": 0,
+                "ajax": 0,
+                "placeholder": "",
+                "return_format": "value",
+                "key": "field_581f83d67ecad",
+                "label": "Select View Page ( 'edit' for list view \/ 'post' for inside post)",
+                "name": "easy_wp_tutorials_select_view_page",
+                "type": "select",
+                "instructions": "Select 'edit' for list view \/ 'post' for inside post",
+                "required": 1,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "",
+                    "class": "",
+                    "id": ""
+                }
+            },
+            {
+                "default_value": "",
+                "maxlength": "",
+                "placeholder": "",
+                "prepend": "",
+                "append": "",
+                "key": "field_5870de6d0b118",
+                "label": "Insert taxonomy name",
+                "name": "easy_wp_tutorials_insert_taxonomy_name",
+                "type": "text",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": [
+                    [
+                        {
+                            "field": "field_581f83d67ecad",
+                            "operator": "==",
+                            "value": "edit-tags"
+                        }
+                    ],
+                    [
+                        {
+                            "field": "field_581f83d67ecad",
+                            "operator": "==",
+                            "value": "term"
+                        }
+                    ]
+                ],
+                "wrapper": {
+                    "width": "",
+                    "class": "",
+                    "id": ""
+                }
+            },
+            {
+                "multiple": 0,
+                "allow_null": 0,
+                "choices": {
+                    "": "Select Page",
+                    "1512": "\u0395\u03c0\u03b9\u03ba\u03bf\u03b9\u03bd\u03c9\u03bd\u03af\u03b1",
+                    "1473": "\u0399\u03c3\u03c4\u03bf\u03c1\u03af\u03b1",
+                    "1164": "Online \u039a\u03c1\u03b1\u03c4\u03ae\u03c3\u03b5\u03b9\u03c2 \u039e\u03b5\u03bd\u03bf\u03b4\u03bf\u03c7\u03b5\u03af\u03bf \u0393\u03bf\u03c5\u03b2\u03b9\u03ac",
+                    "1123": "\u03a6\u03c9\u03c4\u03bf\u03b3\u03c1\u03b1\u03c6\u03af\u03b5\u03c2",
+                    "1108": "\u0395\u03bc\u03c0\u03b5\u03b9\u03c1\u03af\u03b5\u03c2",
+                    "1091": "\u03a5\u03c0\u03b7\u03c1\u03b5\u03c3\u03af\u03b5\u03c2 \u0394\u03c9\u03bc\u03b1\u03c4\u03af\u03bf\u03c5",
+                    "1055": "\u0394\u03c9\u03bc\u03ac\u03c4\u03b9\u03b1 & \u03a0\u03b1\u03ba\u03ad\u03c4\u03b1",
+                    "1007": "\u03a0\u03b5\u03c1\u03b9\u03bf\u03c7\u03ae & \u0391\u03be\u03b9\u03bf\u03b8\u03ad\u03b1\u03c4\u03b1",
+                    "882": "\u0391\u03c1\u03c7\u03b9\u03ba\u03ae",
+                    "569": "\u038c\u03c1\u03bf\u03b9 \u039a\u03c1\u03ac\u03c4\u03b7\u03c3\u03b7\u03c2"
+                },
+                "default_value": [],
+                "ui": 0,
+                "ajax": 0,
+                "placeholder": "",
+                "return_format": "value",
+                "key": "field_586e5b3e24d1d",
+                "label": "Select Dedicated Page",
+                "name": "select_dedicated_page",
+                "type": "select",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "",
+                    "class": "",
+                    "id": ""
+                }
+            }
+        ],
+        "location": [
+            [
+                {
+                    "param": "post_type",
+                    "operator": "==",
+                    "value": "easy_wp_support_post"
+                }
+            ]
+        ],
+        "menu_order": 0,
+        "position": "normal",
+        "style": "default",
+        "label_placement": "top",
+        "instruction_placement": "label",
+        "hide_on_screen": "",
+        "active": 1,
+        "description": "",
+        "local": "json",
+        "modified": 1486553465
+    }
+]
